@@ -15,13 +15,6 @@ public class AnagramTest {
 		String[] argumentsDonkey = new String[] { "donkey" };
 		String[] argumentsComputer = new String[] { "computer" };
 		
-<<<<<<< HEAD
-		Anagram.main(argumentsDonkey);
-		File refactoredFile1 = new File("refactored.txt");
-		
-		if (FileUtils.contentEquals(originalFile1, refactoredFile1)) {
-			System.out.println("Works!");
-=======
 //		Anagram.main(argumentsDonkey);
 //		File refactoredFile1 = new File("refactored.txt");
 //
@@ -35,7 +28,9 @@ public class AnagramTest {
 		if (FileUtils.contentEquals(originalFile2, refactoredFile2)) {
 			System.out.println("");
 			System.out.println("Tests pass! Computer works!");
->>>>>>> master
+		}
+		else {
+			System.out.println("I am touchy");
 		}
 	}
 }
