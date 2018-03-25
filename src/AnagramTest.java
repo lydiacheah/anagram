@@ -9,8 +9,8 @@ import org.apache.commons.io.FileUtils;
  */
 public class AnagramTest {
 	public static void main(String[] args) throws IOException {
-		File originalFile1 = new File("donkeyTestSample.txt");
-		File originalFile2 = new File("computerTestSample.txt");
+		File originalFile1 = new File("testDonkeySample.txt");
+		File originalFile2 = new File("testComputerSample.txt");
 		
 		
 		String[] argumentsDonkey = new String[] { "donkey" };
