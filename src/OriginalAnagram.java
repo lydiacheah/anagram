@@ -4,7 +4,7 @@
  * as this header stays intact.
  */
 
-public class anagram extends WordList implements UsefulConstants {
+public class OriginalAnagram extends WordList implements UsefulConstants {
 	static Word[] Candidate = new Word[MAXWORDS];
 	static int totCandidates=0,
 			   MinimumLength = 3;
