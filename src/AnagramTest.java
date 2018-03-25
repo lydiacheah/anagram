@@ -17,7 +17,7 @@ public class AnagramTest {
 		
 		Anagram.main(argumentsDonkey);
 		File refactoredFile1 = new File("refactored.txt");
-
+		
 		if (FileUtils.contentEquals(originalFile1, refactoredFile1)) {
 			System.out.println("Works!");
 		}
