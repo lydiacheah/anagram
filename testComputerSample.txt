@@ -1,0 +1,85 @@
+Candidate words:
+cep,  cero,  come,  comer, 
+comet,  comp,  compt,  computer, 
+comte,  cop,  cope,  coper, 
+cor,  core,  corm,  cot, 
+cote,  coup,  coupe,  court, 
+crept,  crop,  croup,  cruet, 
+crump,  cue,  cum,  cup, 
+cur,  cure,  curet,  curt, 
+cut,  cute,  cuter,  ecru, 
+ecu,  emu,  eruct,  erupt, 
+euro,  meou,  met,  metro, 
+mop,  mope,  moper,  mor, 
+more,  mort,  mot,  mote, 
+moue,  mucor,  mucro,  mure, 
+mut,  mute,  muter,  omer, 
+ope,  opt,  orc,  ore, 
+ort,  our,  out,  outer, 
+outre,  per,  perm,  pert, 
+pet,  poem,  poet,  pom, 
+pome,  pore,  port,  pot, 
+pour,  pout,  pro,  proem, 
+prom,  puce,  pur,  pure, 
+put,  rec,  recto,  recut, 
+rem,  rep,  repo,  repot, 
+ret,  roc,  roe,  rom, 
+romp,  rope,  rot,  rote, 
+roue,  roup,  rout,  route, 
+rue,  rum,  rump,  rut, 
+temp,  tempo,  term,  toe, 
+tom,  tome,  top,  tope, 
+toper,  tor,  torc,  tore, 
+tour,  tromp,  trop,  trope, 
+truce,  true,  trump,  tumor, 
+tump,  tup,  ump,  upo, 
+
+
+Anagrams of computer:
+proem cut 
+repot cum 
+moper cut 
+tempo cur 
+tumor cep 
+toper cum 
+muter cop 
+tromp cue 
+tromp ecu 
+metro cup 
+trope cum 
+pome curt 
+mope curt 
+mort puce 
+prom cute 
+poem curt 
+tump cero 
+tump core 
+rump cote 
+true comp 
+term coup 
+mute crop 
+romp cute 
+pur comet 
+pur comte 
+mop curet 
+mop truce 
+mop recut 
+mop cuter 
+mop eruct 
+mop cruet 
+pom curet 
+pom truce 
+pom recut 
+pom cuter 
+pom eruct 
+pom cruet 
+tup comer 
+toe crump 
+ump recto 
+pet mucro 
+pet mucor 
+rue compt 
+put comer 
+met croup 
+mut coper 
+----computer----
