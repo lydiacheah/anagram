@@ -1,0 +1,14 @@
+Candidate words:
+den,  dey,  doe,  don, 
+donkey,  dye,  end,  eon, 
+ken,  key,  nod,  ode, 
+oke,  one,  yen,  yod, 
+yok,  yon,  
+
+Anagrams of donkey:
+don key 
+den yok 
+end yok 
+nod key 
+yod ken 
+----donkey----

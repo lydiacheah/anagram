@@ -2,9 +2,9 @@ import java.io.*;
 
 public class WordList implements UsefulConstants {
 	static Word[] Dictionary = new Word[MAXWORDS];
-	static int totWords=0;
+	static int totWords = 0;
 
-	static void ReadDict (String f) {
+	public static void readDict (String f) {
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream (f);
@@ -17,8 +17,8 @@ public class WordList implements UsefulConstants {
 		
 		char buffer[] = new char[MAXWORDLEN];
 		String s;
-		int r =0;
-		while (r!=EOF) {
+		int r = 0;
+		while (r != EOF) {
 			int i = 0;
 			try {
 				// read a word in from the word file
