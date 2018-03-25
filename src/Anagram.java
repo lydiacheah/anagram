@@ -86,8 +86,8 @@ public class Anagram extends WordList implements UsefulConstants {
 				wordArray[level] = candidate[i].aword;
 				wordToPass.total = 0;
 				for (j = 25; j >= 0; j--) {
-					wordToPass.count[j] = (byte) (d.count[j] - candidate[i].count[j] );
-					if ( wordToPass.count[j] != 0 ) {
+					wordToPass.count[j] = (byte)(d.count[j] - candidate[i].count[j]);
+					if (wordToPass.count[j] != 0) {
 						wordToPass.total += wordToPass.count[j];
 					}
 				}
@@ -96,38 +96,40 @@ public class Anagram extends WordList implements UsefulConstants {
 					for (j = 0; j <= level; j++)
 						o.print(wordArray[j] + " ");
 					o.println();
-				} else if (wordToPass.total < minimumLength) {
+				} 
+				else if (wordToPass.total < minimumLength) {
 					; /* Don't call again */
-				} else {
+				} 
+				else {
 					findAnagram(wordToPass, wordArray, level+1,i, totCandidates);
 				}
 			}
 		}
 	}
 
-	static int sortCandidates(Word d) {
-		int[] MasterCount=new int[26];
-		int LeastCommonIndex=0, LeastCommonCount;
+	private static int sortCandidates(Word d) {
+		int[] masterCount = new int[26];
+		int leastCommonIndex = 0, leastCommonCount;
 		int i, j;
 
-		for (j = 25; j >= 0; j--) MasterCount[j] = 0;
-		for (i = totCandidates-1; i >=0; i--)
-			for (j = 25; j >=0; j--)
-				MasterCount[j] += candidate[i].count[j];
+		for (j = 25; j >= 0; j--) masterCount[j] = 0;
+		for (i = totCandidates-1; i >= 0; i--)
+			for (j = 25; j >= 0; j--)
+				masterCount[j] += candidate[i].count[j];
 
-		LeastCommonCount = MAXWORDS * 5;
+		leastCommonCount = MAXWORDS * 5;
 		for (j = 25; j >= 0; j--)
-			if (    MasterCount[j] != 0
-			&& MasterCount[j] < LeastCommonCount
-			&& d.containsLetter(j)  ) {
-				LeastCommonCount = MasterCount[j];
-				LeastCommonIndex = j;
+			if (masterCount[j] != 0
+			&& masterCount[j] < leastCommonCount
+			&& d.containsLetter(j)) {
+				leastCommonCount = masterCount[j];
+				leastCommonIndex = j;
 			}
 
-		quickSort(0, totCandidates - 1, LeastCommonIndex );
+		quickSort(0, totCandidates - 1, leastCommonIndex);
 
 		for (i = 0; i < totCandidates; i++)
-			if (candidate[i].containsLetter(LeastCommonIndex))
+			if (candidate[i].containsLetter(leastCommonIndex))
 				break;
 
 		return i;
@@ -136,7 +138,8 @@ public class Anagram extends WordList implements UsefulConstants {
 	private static void quickSort(int left, int right, int LeastCommonIndex) {
 		// standard quicksort from any algorithm book
 		int i, last;
-		if (left >= right) return;
+		if (left >= right) 
+			return;
 		swap(left, (left + right)/2);
 		last = left;
 		for (i = left + 1; i <= right; i++)  /* partition */
@@ -144,8 +147,8 @@ public class Anagram extends WordList implements UsefulConstants {
 				swap(++last, i);
 
 		swap(last, left);
-		quickSort(left, last-1, LeastCommonIndex);
-		quickSort(last+1,right, LeastCommonIndex);
+		quickSort(left, last - 1, LeastCommonIndex);
+		quickSort(last + 1, right, LeastCommonIndex);
 	}
 
 	private static void swap(int d1, int d2) {
