@@ -18,6 +18,7 @@ public class Anagram extends WordList implements UsefulConstants {
 		writer = new BufferedWriter(new FileWriter("refactored.txt"));
 <<<<<<< HEAD
 
+=======
 >>>>>>> master
 		if (argv.length < 1 || argv.length > 3) {
 			e.println("Usage: java anagram  string-to-anagram " + "[min-len [word-file]]");
@@ -32,6 +33,9 @@ public class Anagram extends WordList implements UsefulConstants {
 		readDict(argv.length == 3 ? argv[2] : "words.txt");
 		doAnagrams(argv[0]);
 =======
+		readDict( argv.length==3? argv[2] : "words.txt" );
+		doAnagrams(argv[0]);		
+		writer.close();
 >>>>>>> master
 	}
 
@@ -48,10 +52,14 @@ public class Anagram extends WordList implements UsefulConstants {
 		writer.write("Anagrams of " + anag + ":");
 		findAnagram(myAnagram, new String[50],  0, 0, rootIndexEnd);
 =======
+		writer.append("Anagrams of " + anag + ":");
+		writer.newLine();
+		findAnagram(myAnagram, new String[50],  0, 0, RootIndexEnd);
 >>>>>>> master
 
 		o.println("----" + anag + "----");
-		writer.write("----" + anag + "----");
+		writer.append("----" + anag + "----");
+		writer.newLine();
 	}
 
 	private static void getCandidates(Word d) {
@@ -71,20 +79,34 @@ public class Anagram extends WordList implements UsefulConstants {
 		return true;
 	}
 
-	private static void printCandidate() {
+	private static void printCandidate() throws IOException {
 		o.println("Candidate words:");
 <<<<<<< HEAD
 		for (int i = 0; i < totCandidates; i++)
 			o.print(candidate[i].getWord() + ", " + ((i%4 == 3) ? "\n" : " "));
 =======
+		writer.append("Candidate words:");
+		writer.newLine();
+		for (int i=0; i < totCandidates; i++) {
+			o.print( Candidate[i].aword + ", " + ((i%4 ==3) ?"\n":" " ) );
+			writer.append(Candidate[i].aword + ", ");
+			if (i%4 == 3) 
+				writer.newLine();
+			else 
+				writer.append(" ");
+		}
 >>>>>>> master
 		o.println("");
+		writer.append("");
+		writer.newLine();
 		o.println();
+		writer.newLine();
 	}
 
 <<<<<<< HEAD
 	private static void findAnagram(Word d, String wordArray[], int level, int startAt, int endAt) {
 =======
+	private static void findAnagram(Word d, String WordArray[], int Level, int StartAt, int EndAt) throws IOException {
 >>>>>>> master
 		int i, j;
 		boolean enoughCommonLetters;
@@ -114,6 +136,13 @@ public class Anagram extends WordList implements UsefulConstants {
 				} 
 				else if (wordToPass.getTotal() < minimumLength) {
 =======
+					for (j = 0; j <= Level; j++) {
+						o.print(WordArray[j] + " ");
+						writer.append(WordArray[j] + " ");
+					}
+					o.println();
+					writer.newLine();
+				} else if (WordToPass.total < MinimumLength) {
 >>>>>>> master
 					; /* Don't call again */
 				} 
