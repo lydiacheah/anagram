@@ -48,10 +48,10 @@ public class Anagram extends WordList implements UsefulConstants {
 
 	private static void getCandidates(Word d) {
 		for (int i = totCandidates = 0; i < totWords; i++)
-			if ((Dictionary[i].total >= minimumLength)
-					&& (Dictionary[i].total + minimumLength <= d.total
-					||  Dictionary[i].total == d.total)
-					&& (fewerOfEachLetter(d.count, Dictionary[i].count)))
+			if ((Dictionary[i].getTotal() >= minimumLength)
+					&& (Dictionary[i].getTotal() + minimumLength <= d.getTotal()
+					||  Dictionary[i].getTotal() == d.getTotal())
+					&& (fewerOfEachLetter(d.getCount(), Dictionary[i].getCount())))
 				candidate[totCandidates++] = Dictionary[i];
 
 	}
@@ -66,7 +66,7 @@ public class Anagram extends WordList implements UsefulConstants {
 	private static void printCandidate() {
 		o.println("Candidate words:");
 		for (int i = 0; i < totCandidates; i++)
-			o.print(candidate[i].aword + ", " + ((i%4 == 3) ? "\n" : " "));
+			o.print(candidate[i].getWord() + ", " + ((i%4 == 3) ? "\n" : " "));
 		o.println("");
 		o.println();
 	}
@@ -79,25 +79,25 @@ public class Anagram extends WordList implements UsefulConstants {
 		for (i = startAt; i < endAt; i++) {
 			enoughCommonLetters = true;
 			for (j = 25; j >= 0 && enoughCommonLetters; j--)
-				if (d.count[j] < candidate[i].count[j])
+				if (d.getLetterCount(j) < candidate[i].getLetterCount(j))
 					enoughCommonLetters = false;
 
 			if (enoughCommonLetters) {
-				wordArray[level] = candidate[i].aword;
-				wordToPass.total = 0;
+				wordArray[level] = candidate[i].getWord();
+				wordToPass.setTotal(0);
 				for (j = 25; j >= 0; j--) {
-					wordToPass.count[j] = (byte)(d.count[j] - candidate[i].count[j]);
-					if (wordToPass.count[j] != 0) {
-						wordToPass.total += wordToPass.count[j];
+					wordToPass.setLetterCount(j, (byte)(d.getLetterCount(j) - candidate[i].getLetterCount(j)));
+					if (wordToPass.getLetterCount(j) != 0) {
+						wordToPass.setTotal(wordToPass.getTotal() + wordToPass.getLetterCount(j));
 					}
 				}
-				if (wordToPass.total == 0) {
+				if (wordToPass.getTotal() == 0) {
 					/* Found a series of words! */
 					for (j = 0; j <= level; j++)
 						o.print(wordArray[j] + " ");
 					o.println();
 				} 
-				else if (wordToPass.total < minimumLength) {
+				else if (wordToPass.getTotal() < minimumLength) {
 					; /* Don't call again */
 				} 
 				else {
@@ -115,7 +115,7 @@ public class Anagram extends WordList implements UsefulConstants {
 		for (j = 25; j >= 0; j--) masterCount[j] = 0;
 		for (i = totCandidates-1; i >= 0; i--)
 			for (j = 25; j >= 0; j--)
-				masterCount[j] += candidate[i].count[j];
+				masterCount[j] += candidate[i].getLetterCount(j);
 
 		leastCommonCount = MAXWORDS * 5;
 		for (j = 25; j >= 0; j--)

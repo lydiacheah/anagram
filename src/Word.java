@@ -1,12 +1,12 @@
 
 public class Word  {
-	int count[] = new int[26];  // count of each letter in the word
-	int total;  // number of letters in the word
-	String aword;  // the word
+	private int count[] = new int[26];  // count of each letter in the word
+	private int total;  // number of letters in the word
+	private String word;  // the word
 
 	public Word(String s) { // construct an entry from a string
 		int ch;
-		aword = s;
+		word = s;
 		total = 0;
 		s = s.toLowerCase();
 		for (int i = 'a'; i <= 'z'; i++) count[i-'a'] = 0;
@@ -35,7 +35,30 @@ public class Word  {
 		if ( t.total != total )
 			return (t.total - total);
 		
-		return (aword).compareTo(t.aword);
+		return (word).compareTo(t.word);
+	}
+	
+	public int getTotal() {
+		return total;
+	}
+	
+	public void setTotal(int total) {
+		this.total = total;
+	}
+	
+	public String getWord() {
+		return word;
+	}
+	
+	public int getLetterCount(int letter) {
+		return count[letter];
+	}
+	
+	public void setLetterCount(int letter, int count) {
+		this.count[letter] = count;
+	}
+	
+	public int[] getCount() {
+		return count;
 	}
 }
-
