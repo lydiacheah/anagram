@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 /*
  * Usage: java Anagram string [[min-len] wordfile] Java Anagram program, Peter
  * van der Linden Jan 7, 1996. Feel free to pass this program around, as long
@@ -5,11 +9,14 @@
  */
 
 public class Anagram extends WordList implements UsefulConstants {
+	private static BufferedWriter writer;
 	private static Word[] Candidate = new Word[MAXWORDS];
 	private static int totCandidates = 0, 
 			MinimumLength = 3;
 
-	public static void main(String[] argv) {
+	public static void main(String[] argv) throws IOException {
+		writer = new BufferedWriter(new FileWriter("refactored.txt"));
+		
 		if (argv.length < 1 || argv.length > 3) {
 			e.println("Usage: java anagram  string-to-anagram " + "[min-len [word-file]]");
 			return;
@@ -24,7 +31,7 @@ public class Anagram extends WordList implements UsefulConstants {
 
 	}
 
-	private static void doAnagrams(String anag) {
+	private static void doAnagrams(String anag) throws IOException {
 		Word myAnagram = new Word(anag);
 
 		getCandidates(myAnagram);
@@ -33,9 +40,11 @@ public class Anagram extends WordList implements UsefulConstants {
 		int RootIndexEnd = sortCandidates(myAnagram);
 
 		o.println("Anagrams of " + anag + ":");
+		writer.write("Anagrams of " + anag + ":");
 		findAnagram(myAnagram, new String[50],  0, 0, RootIndexEnd);
 
 		o.println("----" + anag + "----");
+		writer.write("----" + anag + "----");
 	}
 
 	private static void getCandidates(Word d) {

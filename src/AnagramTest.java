@@ -10,22 +10,23 @@ import org.apache.commons.io.FileUtils;
 public class AnagramTest {
 	public static void main(String[] args) throws IOException {
 		File originalFile1 = new File("testDonkeySample.txt");
-		File originalFile2 = new File("testComputerSample.txt");
-		
-		
+//		File originalFile2 = new File("testComputerSample.txt");
+				
 		String[] argumentsDonkey = new String[] { "donkey" };
-		String[] argumentsComputer = new String[] { "computer" };
+//		String[] argumentsComputer = new String[] { "computer" };
 		
-		File refactoredFile1 = new File("refactoredDonkey.txt");
-		File refactoredFile2 = new File("refactoredComputer.txt");
-		
+		Anagram.main(argumentsDonkey);
+		File refactoredFile1 = new File("refactored.txt");
+
 		if (FileUtils.contentEquals(originalFile1, refactoredFile1)) {
-			
+			System.out.println("Works!");
 		}
-		
-		if (FileUtils.contentEquals(originalFile2, refactoredFile2)) {
-			
-		}
-		
+
+//		refactoredAnagram.main(argumentsComputer);
+//		File refactoredFile = new File("refactored.txt");
+//		
+//		if (FileUtils.contentEquals(originalFile2, refactoredFile2)) {
+//			
+//		}
 	}
 }
