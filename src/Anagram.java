@@ -9,27 +9,27 @@ import java.io.IOException;
  */
 
 public class Anagram extends WordList implements UsefulConstants {
+	// BufferedWriter to write the anagram file
 	private static BufferedWriter writer;
-	private static Word[] candidate = new Word[MAXWORDS];
-	private static int totCandidates = 0, 
-			minimumLength = 3;
+	private static Word[] candidate;
+	private static int totCandidates, minimumLength;
 
 	public static void main(String[] argv) throws IOException {
+		// Creates BufferedWriter to write the anagram file
 		writer = new BufferedWriter(new FileWriter("refactored.txt"));
+		candidate = new Word[MAXWORDS];
+		totCandidates = 0;
 
 		if (argv.length < 1 || argv.length > 3) {
 			e.println("Usage: java anagram  string-to-anagram " + "[min-len [word-file]]");
 			return;
 		}
 
-		if (argv.length >= 2)
-			minimumLength = Integer.parseInt(argv[1]);
-
-		// word filename is optional 3rd argument
+		minimumLength = (argv.length >= 2) ? Integer.parseInt(argv[1]) : 3;
 		readDict(argv.length == 3 ? argv[2] : "words.txt");
 		doAnagrams(argv[0]);		
 		writer.close();
-	}
+	}	
 
 	private static void doAnagrams(String anag) throws IOException {
 		Word myAnagram = new Word(anag);
@@ -47,16 +47,15 @@ public class Anagram extends WordList implements UsefulConstants {
 
 		o.println("----" + anag + "----");
 		writer.append("----" + anag + "----");
-		writer.newLine();
 	}
 
 	private static void getCandidates(Word d) {
 		for (int i = totCandidates = 0; i < totWords; i++)
-			if ((Dictionary[i].getTotal() >= minimumLength)
-					&& (Dictionary[i].getTotal() + minimumLength <= d.getTotal()
-					||  Dictionary[i].getTotal() == d.getTotal())
-					&& (fewerOfEachLetter(d.getCount(), Dictionary[i].getCount())))
-				candidate[totCandidates++] = Dictionary[i];
+			if ((dictionary[i].getTotal() >= minimumLength)
+					&& (dictionary[i].getTotal() + minimumLength <= d.getTotal()
+					||  dictionary[i].getTotal() == d.getTotal())
+					&& (fewerOfEachLetter(d.getCount(), dictionary[i].getCount())))
+				candidate[totCandidates++] = dictionary[i];
 	}
 
 	private static boolean fewerOfEachLetter(int anagCount[], int entryCount[]) {
@@ -67,7 +66,6 @@ public class Anagram extends WordList implements UsefulConstants {
 	}
 
 	private static void printCandidate() throws IOException {
-
 		o.println("Candidate words:");
 		writer.append("Candidate words:");
 		writer.newLine();
@@ -128,20 +126,18 @@ public class Anagram extends WordList implements UsefulConstants {
 	}
 
 	private static int sortCandidates(Word d) {
-		int[] masterCount = new int[26];
+		int[] masterCount = new int[ALPHABETLENGTH];
 		int leastCommonIndex = 0, leastCommonCount;
 		int i, j;
 
 		for (j = 25; j >= 0; j--) masterCount[j] = 0;
-		for (i = totCandidates-1; i >= 0; i--)
+		for (i = totCandidates - 1; i >= 0; i--)
 			for (j = 25; j >= 0; j--)
 				masterCount[j] += candidate[i].getLetterCount(j);
 
 		leastCommonCount = MAXWORDS * 5;
 		for (j = 25; j >= 0; j--)
-			if (masterCount[j] != 0
-			&& masterCount[j] < leastCommonCount
-			&& d.containsLetter(j)) {
+			if (masterCount[j] != 0 && masterCount[j] < leastCommonCount && d.containsLetter(j)) {
 				leastCommonCount = masterCount[j];
 				leastCommonIndex = j;
 			}
@@ -155,7 +151,7 @@ public class Anagram extends WordList implements UsefulConstants {
 		return i;
 	}
 
-	private static void quickSort(int left, int right, int LeastCommonIndex) {
+	private static void quickSort(int left, int right, int leastCommonIndex) {
 		// standard quicksort from any algorithm book
 		int i, last;
 		if (left >= right) 
@@ -163,12 +159,12 @@ public class Anagram extends WordList implements UsefulConstants {
 		swap(left, (left + right)/2);
 		last = left;
 		for (i = left + 1; i <= right; i++)  /* partition */
-			if (candidate[i].MultiFieldCompare (candidate[left], LeastCommonIndex) == -1)
+			if (candidate[i].multiFieldCompare(candidate[left], leastCommonIndex) == -1)
 				swap(++last, i);
 
 		swap(last, left);
-		quickSort(left, last - 1, LeastCommonIndex);
-		quickSort(last + 1, right, LeastCommonIndex);
+		quickSort(left, last - 1, leastCommonIndex);
+		quickSort(last + 1, right, leastCommonIndex);
 	}
 
 	private static void swap(int d1, int d2) {

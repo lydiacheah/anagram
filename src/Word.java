@@ -1,6 +1,6 @@
 
 public class Word  {
-	private int count[] = new int[26];  // count of each letter in the word
+	private int count[] = new int[UsefulConstants.ALPHABETLENGTH];  // count of each letter in the word
 	private int total;  // number of letters in the word
 	private String word;  // the word
 
@@ -11,7 +11,7 @@ public class Word  {
 		s = s.toLowerCase();
 		for (int i = 'a'; i <= 'z'; i++) count[i-'a'] = 0;
 
-		for (int i = s.length()-1; i >= 0; i--) {
+		for (int i = s.length() - 1; i >= 0; i--) {
 			ch = s.charAt(i) - 'a';
 			if (ch >= 0 && ch < 26) {
 				total++;
@@ -20,19 +20,18 @@ public class Word  {
 		}
 	}
 
-	public boolean containsLetter(int j){
+	public boolean containsLetter(int j) {
 		return count[j] != 0;
 	}
 
-	public int MultiFieldCompare(Word t, int LeastCommonIndex)
-	{
-		if ( (containsLetter(LeastCommonIndex) ) &&  !(t.containsLetter(LeastCommonIndex)) )
+	public int multiFieldCompare(Word t, int LeastCommonIndex) {
+		if ((containsLetter(LeastCommonIndex)) && !(t.containsLetter(LeastCommonIndex)))
 			return 1;
 		
-		if ( !(containsLetter(LeastCommonIndex) ) &&  (t.containsLetter(LeastCommonIndex)) )
+		if (!(containsLetter(LeastCommonIndex)) && (t.containsLetter(LeastCommonIndex)))
 			return -1;
 		
-		if ( t.total != total )
+		if (t.total != total)
 			return (t.total - total);
 		
 		return (word).compareTo(t.word);

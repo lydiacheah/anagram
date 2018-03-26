@@ -1,10 +1,13 @@
 import java.io.*;
 
 public class WordList implements UsefulConstants {
-	static Word[] Dictionary = new Word[MAXWORDS];
-	static int totWords = 0;
+	public static Word[] dictionary;
+	public static int totWords;
 
-	public static void readDict (String f) {
+	public static void readDict (String f) {		
+		dictionary = new Word[MAXWORDS];
+		totWords = 0;
+		
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream (f);
@@ -32,7 +35,7 @@ public class WordList implements UsefulConstants {
 			}
 			
 			s = new String(buffer,0,i);
-			Dictionary[totWords] = new Word(s);
+			dictionary[totWords] = new Word(s);
 			totWords++;
 		}
 		

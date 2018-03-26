@@ -13,6 +13,7 @@ public interface UsefulConstants {
 	public static final int MAXWORDS = 100000;
 	public static final int MAXWORDLEN = 30;
 	public static final int EOF = -1;
+	public static final int ALPHABETLENGTH = 26;
 	
 	// shorter alias for I/O streams
 	public static final PrintStream o = System.out;

@@ -1,36 +1,53 @@
-import java.io.File;
 import java.io.IOException;
-import org.apache.commons.io.FileUtils;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
-/**
+/**• OutOfBounds fix
+• a faster way to assert the tests
+• minor type errors
  * Test program for original anagram and refactored anagram.
  * 
  * Authors: Lydia Cheah and Sofia Lis 
  */
 public class AnagramTest {
 	public static void main(String[] args) throws IOException {
-		File originalFile1 = new File("testDonkeySample.txt");
-		File originalFile2 = new File("testComputerSample.txt");
-				
-		String[] argumentsDonkey = new String[] { "donkey" };
-		String[] argumentsComputer = new String[] { "computer" };
-		
-//		Anagram.main(argumentsDonkey);
-//		File refactoredFile1 = new File("refactored.txt");
-//
-//		if (FileUtils.contentEquals(originalFile1, refactoredFile1)) {
-//			System.out.println("Donkey works!");
-//		}
+		// Arguments for the tests
+		String[] argumentsDonkey = new String[] {"donkey"};
+		String[] argumentsComputer = new String[] {"computer"};
+		String[] argumentsComputerFour = new String[] {"computer", "4"};
+
+		// Paths to the test files
+		String donkeyPath = "testDonkeySample.txt";
+		String computerPath = "testComputerSample.txt";
+		String computerFourPath = "testComputerFourSample.txt";
+		String refactoredPath = "refactored.txt";
+
+		// Two byte arrays to compare the files
+		byte[] originalFile, testFile;
+
+		Anagram.main(argumentsDonkey);				
+		originalFile = Files.readAllBytes(Paths.get(donkeyPath));
+		testFile = Files.readAllBytes(Paths.get(refactoredPath));
+		if (Arrays.equals(originalFile, testFile)) 
+			System.out.println("Donkey works!");
+		else 
+			System.out.println("Donkey went wrong!");
 
 		Anagram.main(argumentsComputer);
-		File refactoredFile2 = new File("refactored.txt");
+		originalFile = Files.readAllBytes(Paths.get(computerPath));
+		testFile = Files.readAllBytes(Paths.get(refactoredPath));
+		if (Arrays.equals(originalFile, testFile)) 
+			System.out.println("Computer works!");
+		else 
+			System.out.println("Computer went wrong!");
 		
-		if (FileUtils.contentEquals(originalFile2, refactoredFile2)) {
-			System.out.println("");
-			System.out.println("Tests pass! Computer works!");
-		}
-		else {
-			System.out.println("I am touchy");
-		}
+		Anagram.main(argumentsComputerFour);
+		originalFile = Files.readAllBytes(Paths.get(computerFourPath));
+		testFile = Files.readAllBytes(Paths.get(refactoredPath));
+		if (Arrays.equals(originalFile, testFile)) 
+			System.out.println("Computer with minLength 4 works!");
+		else 
+			System.out.println("Computer with minLength 4 went wrong!");
 	}
 }
