@@ -9,23 +9,31 @@ import java.io.IOException;
  */
 
 public class Anagram extends WordList implements UsefulConstants {
+	// for testing
 	private static BufferedWriter writer;
-	private static Word[] Candidate = new Word[MAXWORDS];
-	private static int totCandidates = 0, 
-			MinimumLength = 3;
-
+	// Word array for all anagram candidates
+	private static Word[] candidateArr = new Word[MAXWORDS];
+	// total number of anagram candidates 
+	private static int numCandidates = 0; 
+	// default minimum length of anagram is 3 letters
+	private static int anagMinLength = 3; 
+	
 	public static void main(String[] argv) throws IOException {
+		// writer for testing
 		writer = new BufferedWriter(new FileWriter("refactored.txt"));
+		// no arguments given
 		if (argv.length < 1 || argv.length > 3) {
 			e.println("Usage: java anagram  string-to-anagram " + "[min-len [word-file]]");
 			return;
 		}
-
-		if (argv.length >= 2)
-			MinimumLength = Integer.parseInt(argv[1]);
+		
+		// second argument is the minimum length of anagram 
+		if (argv.length >= 2) {
+			anagMinLength = Integer.parseInt(argv[1]);
+		}
 
 		// word filename is optional 3rd argument
-		readDict( argv.length==3? argv[2] : "words.txt" );
+		readDict(argv.length == 3 ? argv[2] : "words.txt");
 		doAnagrams(argv[0]);		
 		writer.close();
 	}
@@ -33,33 +41,47 @@ public class Anagram extends WordList implements UsefulConstants {
 	private static void doAnagrams(String anag) throws IOException {
 		Word myAnagram = new Word(anag);
 
+		// printing candidates
 		getCandidates(myAnagram);
 		printCandidate();
 
-		int RootIndexEnd = sortCandidates(myAnagram);
+		// variable is the index of the candidate in Candidate 
+		// that contains the least appeared alphabet
+		int rootIndexEnd = sortCandidates(myAnagram);
 
+		// printing anagrams
 		o.println("Anagrams of " + anag + ":");
 		writer.append("Anagrams of " + anag + ":");
 		writer.newLine();
-		findAnagram(myAnagram, new String[50],  0, 0, RootIndexEnd);
+		findAnagram(myAnagram, new String[50],  0, 0, rootIndexEnd);
 
+		// end
 		o.println("----" + anag + "----");
 		writer.append("----" + anag + "----");
 		writer.newLine();
 	}
 
-	private static void getCandidates(Word d) {
-		for (int i = totCandidates = 0; i < totWords; i++)
-			if (   (    Dictionary[i].total >= MinimumLength   )
-					&& (    Dictionary[i].total + MinimumLength <= d.total
-					||  Dictionary[i].total == d.total)
-					&& ( fewerOfEachLetter(d.count, Dictionary[i].count) )  )
-				Candidate[totCandidates++]=Dictionary[i];
+	private static void getCandidates(Word word) {
+		int totalWords = getTotalWords();
+		Word[] dictionary = getDict(); 
+
+		// go through each word in dictionary
+		for (int i = 0; i < totalWords; i++) {
+			Word currWord = dictionary[i];
+			if ((currWord.numLetters >= anagMinLength)
+					&& (currWord.numLetters + anagMinLength <= word.numLetters
+					||  currWord.numLetters == word.numLetters)
+					&& (hasFewerofEachLetter(word.letterCount, currWord.letterCount)))
+				candidateArr[numCandidates++]= currWord;
+		}
 
 	}
 
-	private static boolean fewerOfEachLetter(int anagCount[], int entryCount[]) {
-		for (int i = 25; i >=0; i--)
+	private static boolean hasFewerofEachLetter(int anagCount[], int entryCount[]) {
+		// compares the total number of each letter in the entered word and the word from the dictionary
+		// the total number of each letter in the word from the dictionary
+		// must be less than the given word 
+		for (int i = 25; i >= 0; i--)
 			if (entryCount[i] > anagCount[i]) return false;
 		return true;
 	}
@@ -68,84 +90,138 @@ public class Anagram extends WordList implements UsefulConstants {
 		o.println("Candidate words:");
 		writer.append("Candidate words:");
 		writer.newLine();
-		for (int i=0; i < totCandidates; i++) {
-			o.print( Candidate[i].aword + ", " + ((i%4 ==3) ?"\n":" " ) );
-			writer.append(Candidate[i].aword + ", ");
-			if (i%4 == 3) 
+		
+		// print each candidate out
+		for (int i = 0; i < numCandidates; i++) {
+			o.print(candidateArr[i].word + ", ");
+			writer.append(candidateArr[i].word + ", ");
+			// only print 4 candidates on one line 
+			if (i % 4 == 3) {
+				o.print("\n");
 				writer.newLine();
-			else 
+			} else {
+				o.print(" ");
 				writer.append(" ");
+			}
 		}
-		o.println("");
-		writer.append("");
+		
+		o.println();
 		writer.newLine();
 		o.println();
 		writer.newLine();
 	}
 
-	private static void findAnagram(Word d, String WordArray[], int Level, int StartAt, int EndAt) throws IOException {
-		int i, j;
-		boolean enoughCommonLetters;
-		Word WordToPass = new Word("");
-
-		for (i = StartAt; i < EndAt; i++) {
-			enoughCommonLetters = true;
-			for (j = 25; j >= 0 && enoughCommonLetters; j--)
-				if (d.count[j] < Candidate[i].count[j])
-					enoughCommonLetters = false;
-
-			if (enoughCommonLetters) {
-				WordArray[Level] = Candidate[i].aword;
-				WordToPass.total = 0;
-				for (j = 25; j >= 0; j--) {
-					WordToPass.count[j] = (byte) (d.count[j] - Candidate[i].count[j] );
-					if ( WordToPass.count[j] != 0 ) {
-						WordToPass.total += WordToPass.count[j];
-					}
-				}
-				if (WordToPass.total == 0) {
+	private static void findAnagram(Word word, String[] wordArr, int level, int startAt, int endAt) throws IOException {
+		for (int i = startAt; i < endAt; i++) {
+			Word candidate = candidateArr[i];
+			if (candidateHasEnoughCommonLetters(word, candidate)) {
+				Word wordToPass = new Word("");
+				wordArr[level] = candidate.word;
+				
+				if (hasSameLetterCounts(word, candidate, wordToPass)) {
 					/* Found a series of words! */
-					for (j = 0; j <= Level; j++) {
-						o.print(WordArray[j] + " ");
-						writer.append(WordArray[j] + " ");
+					for (int j = 0; j <= level; j++) {
+						o.print(wordArr[j] + " ");
+						writer.append(wordArr[j] + " ");
 					}
 					o.println();
 					writer.newLine();
-				} else if (WordToPass.total < MinimumLength) {
-					; /* Don't call again */
-				} else {
-					findAnagram(WordToPass, WordArray, Level+1,i, totCandidates);
+				} else if (wordToPass.numLetters >= anagMinLength){
+					findAnagram(wordToPass, wordArr, level + 1, i, numCandidates);
 				}
 			}
 		}
 	}
 
-	static int sortCandidates(Word d) {
-		int[] MasterCount=new int[26];
-		int LeastCommonIndex=0, LeastCommonCount;
-		int i, j;
-
-		for (j = 25; j >= 0; j--) MasterCount[j] = 0;
-		for (i = totCandidates-1; i >=0; i--)
-			for (j = 25; j >=0; j--)
-				MasterCount[j] += Candidate[i].count[j];
-
-		LeastCommonCount = MAXWORDS * 5;
-		for (j = 25; j >= 0; j--)
-			if (    MasterCount[j] != 0
-			&& MasterCount[j] < LeastCommonCount
-			&& d.containsLetter(j)  ) {
-				LeastCommonCount = MasterCount[j];
-				LeastCommonIndex = j;
+	/**
+	 * Checks if the given word and candidate have the exact same count
+	 * for each alphabet. 
+	 * 
+	 * @param word given word 
+	 * @param candidate candidate for anagram
+	 * @param wordToPass 
+	 * @return true if they have the same letter count, false if not
+	 */
+	private static boolean hasSameLetterCounts(Word word, Word candidate,
+			Word wordToPass) {
+		// number of letters in wordToPass will result in 0 if they have the same letter counts
+		for (int j = 25; j >= 0; j--) {
+			wordToPass.letterCount[j] = (byte) (word.letterCount[j] - candidate.letterCount[j]);
+			if (wordToPass.letterCount[j] != 0) {
+				wordToPass.numLetters += wordToPass.letterCount[j];
 			}
+		}
+		return wordToPass.numLetters == 0;
+	}
 
-		quickSort(0, totCandidates - 1, LeastCommonIndex );
+	/**
+	 * Checks if a candidate has no more than the same count of each alphabet 
+	 * with the given word. 
+	 * @param word given word 
+	 * @param candidate candidate for anagram
+	 * @return true if the candidate has enough letters in common with the given word, false if it has more
+	 */
+	private static boolean candidateHasEnoughCommonLetters(Word word, Word candidate) {
+		boolean enoughCommonLetters = true;
+		for (int j = 25; j >= 0 && enoughCommonLetters; j--) {
+			if (word.letterCount[j] < candidate.letterCount[j]) {
+				enoughCommonLetters = false;
+			}
+		}
+		return enoughCommonLetters;
+	}
 
-		for (i = 0; i < totCandidates; i++)
-			if (Candidate[i].containsLetter(LeastCommonIndex))
+	private static int sortCandidates(Word word) {
+		// contains the total number of each alphabet in all candidates
+		int[] masterCount = new int[26];		
+		countTotalLetters(masterCount);
+
+		// keeps track of the smallest number of times an alphabet appeared
+		// as well as its index
+		int indexOfLeastCommonLetter = 0;
+		int leastCommonCount = MAXWORDS * 5;
+		for (int j = 0; j < masterCount.length; j++) {
+			if (masterCount[j] != 0 
+					&& masterCount[j] < leastCommonCount
+					&& word.containsLetter(j)) {
+				leastCommonCount = masterCount[j];
+				indexOfLeastCommonLetter = j;
+			}
+		}
+
+		// sorting Candidate array
+		quickSort(0, numCandidates - 1, indexOfLeastCommonLetter);
+
+		return findCandidateIndex(indexOfLeastCommonLetter);
+	}
+
+	/**
+	 * Finds the new index of the sorted candidate array 
+	 * that has the letter that appears the least.
+	 * @param indexOfLeastCommonLetter
+	 * @return
+	 */
+	private static int findCandidateIndex(int indexOfLeastCommonLetter) {
+		int candidateIndex = 0;
+		for (int i = 0; i < numCandidates; i++) {
+			if (candidateArr[i].containsLetter(indexOfLeastCommonLetter)) { 
+				candidateIndex = i;
 				break;
+			}
+		}
+		return candidateIndex;
+	}
 
-		return i;
+	/**
+	 * @param masterCount
+	 */
+	private static void countTotalLetters(int[] masterCount) {
+		// counting the alphabets
+		for (int i = 0; i < numCandidates; i++) {
+			for (int j = 0; j < masterCount.length; j++) {
+				masterCount[j] += candidateArr[i].letterCount[j];
+			}
+		}
 	}
 
 	private static void quickSort(int left, int right, int LeastCommonIndex) {
@@ -155,7 +231,7 @@ public class Anagram extends WordList implements UsefulConstants {
 		swap(left, (left + right)/2);
 		last = left;
 		for (i = left + 1; i <= right; i++)  /* partition */
-			if (Candidate[i].MultiFieldCompare (Candidate[left], LeastCommonIndex) == -1)
+			if (candidateArr[i].MultiFieldCompare (candidateArr[left], LeastCommonIndex) == -1)
 				swap(++last, i);
 
 		swap(last, left);
@@ -164,8 +240,8 @@ public class Anagram extends WordList implements UsefulConstants {
 	}
 
 	private static void swap(int d1, int d2) {
-		Word tmp = Candidate[d1];
-		Candidate[d1] = Candidate[d2];
-		Candidate[d2] = tmp;
+		Word tmp = candidateArr[d1];
+		candidateArr[d1] = candidateArr[d2];
+		candidateArr[d2] = tmp;
 	}
 }
