@@ -35,34 +35,44 @@ public class Anagram extends WordList implements UsefulConstants {
 		// word filename is optional 3rd argument
 		readDict(argv.length == 3 ? argv[2] : "words.txt");
 		
-		Word anagram = new Word(argv[0]);
+		Word word = new Word(argv[0]);
 		
 		// find and print candidates
-		getCandidates(anagram);
+		getCandidates(word);
 		printCandidate();
 		
 		// find and print anagrams
-		getAnagrams(anagram);		
-		writer.close();
-	}
-
-	private static void getAnagrams(Word anagram) throws IOException {
-		// index of the candidate in Candidate array
-		// that contains the least appeared alphabet
-		int rootIndexEnd = sortCandidates(anagram);
-
-		// printing anagrams
-		o.println("Anagrams of " + anagram + ":");
-		writer.append("Anagrams of " + anagram + ":");
-		writer.newLine();
-		findAnagram(anagram, new String[50],  0, 0, rootIndexEnd);
+		getAnagrams(word);
 
 		// end
-		o.println("----" + anagram + "----");
-		writer.append("----" + anagram + "----");
+		o.println("----" + word + "----");
+		writer.append("----" + word + "----");
 		writer.newLine();
+		
+		writer.close();
 	}
+	
+	/**
+	 * Finds and prints all the anagrams of the given word
+	 * @param word given word
+	 * @throws IOException
+	 */
+	private static void getAnagrams(Word word) throws IOException {
+		// index of the candidate in Candidate array
+		// that contains the least appeared alphabet
+		int rootIndexEnd = sortCandidates(word);
 
+		// printing anagrams
+		o.println("Anagrams of " + word + ":");
+		writer.append("Anagrams of " + word + ":");
+		writer.newLine();
+		findAnagram(word, new String[50],  0, 0, rootIndexEnd);
+	}
+	
+	/**
+	 * Finds all possible anagram candidates and initializes the candidate array.
+	 * @param word given word
+	 */
 	private static void getCandidates(Word word) {
 		int totalWords = getTotalWords();
 		Word[] dictionary = getDict(); 
@@ -78,16 +88,25 @@ public class Anagram extends WordList implements UsefulConstants {
 		}
 
 	}
-
+	
+	/**
+	 * Checks if the dictionary word has fewer of each letter than the given word
+	 * @param anagCount array containing the count of each letter in the given word
+	 * @param entryCount array containing the count of each letter in the dictionary word entry
+	 * @return true if the dictionary word entry has fewer of each letter than the given word, false if more
+	 */
 	private static boolean hasFewerofEachLetter(int anagCount[], int entryCount[]) {
-		// compares the total number of each letter in the entered word and the word from the dictionary
 		// the total number of each letter in the word from the dictionary
 		// must be less than the given word 
 		for (int i = 25; i >= 0; i--)
 			if (entryCount[i] > anagCount[i]) return false;
 		return true;
 	}
-
+	
+	/**
+	 * Prints all the candidates in the candidate array.
+	 * @throws IOException
+	 */
 	private static void printCandidate() throws IOException {
 		o.println("Candidate words:");
 		writer.append("Candidate words:");
@@ -112,7 +131,16 @@ public class Anagram extends WordList implements UsefulConstants {
 		o.println();
 		writer.newLine();
 	}
-
+	
+	/**
+	 * Finds all the anagrams of a specific word. 
+	 * @param word
+	 * @param wordArr
+	 * @param level
+	 * @param startAt
+	 * @param endAt
+	 * @throws IOException
+	 */
 	private static void findAnagram(Word word, String[] wordArr, int level, int startAt, int endAt) throws IOException {
 		for (int i = startAt; i < endAt; i++) {
 			Word candidate = candidateArr[i];
@@ -173,6 +201,11 @@ public class Anagram extends WordList implements UsefulConstants {
 		return enoughCommonLetters;
 	}
 
+	/**
+	 * Sorts the candidate array. 
+	 * @param word
+	 * @return
+	 */
 	private static int sortCandidates(Word word) {
 		// contains the total number of each alphabet in all candidates
 		int[] masterCount = new int[26];		
