@@ -101,7 +101,6 @@ public class Anagram extends Word implements UsefulConstants {
 				candidateArr[numCandidates++] = currWord;
 			}
 		}
-
 	}
 
 	/**
@@ -110,7 +109,7 @@ public class Anagram extends Word implements UsefulConstants {
 	 * @param currWord word from dictionary
 	 * @return
 	 */
-	private static boolean isACandidate(Word word, Word currWord) {
+	private boolean isACandidate(Word word, Word currWord) {
 		return (currWord.numLetters >= anagMinLength)
 				&& (currWord.numLetters + anagMinLength <= word.numLetters
 				||  currWord.numLetters == word.numLetters)
@@ -123,7 +122,7 @@ public class Anagram extends Word implements UsefulConstants {
 	 * @param entryCount array containing the count of each letter in the dictionary word entry
 	 * @return true if the dictionary word entry has fewer of each letter than the given word, false if more
 	 */
-	private static boolean hasFewerofEachLetter(int anagCount[], int entryCount[]) {
+	private boolean hasFewerofEachLetter(int anagCount[], int entryCount[]) {
 		// the total number of each letter in the word from the dictionary
 		// must be less than the given word 
 		for (int i = NUM_ALPHABETS - 1; i >= 0; i--)
@@ -200,7 +199,7 @@ public class Anagram extends Word implements UsefulConstants {
 	 * @param wordToPass 
 	 * @return true if they have the same letter count, false if not
 	 */
-	private static boolean hasSameLetterCounts(Word word, Word candidate,
+	private boolean hasSameLetterCounts(Word word, Word candidate,
 			Word wordToPass) {
 		// number of letters in wordToPass will result in 0 if they have the same letter counts
 		for (int j = NUM_ALPHABETS - 1; j >= 0; j--) {
