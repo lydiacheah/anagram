@@ -72,7 +72,6 @@ public class Anagram extends WordList implements UsefulConstants {
 		// index of the candidate in Candidate array
 		// that contains the least appeared alphabet
 		int rootIndexEnd = sortCandidates(word);
-
 		findAnagram(word, new String[50],  0, 0, rootIndexEnd);
 	}
 	
@@ -87,13 +86,24 @@ public class Anagram extends WordList implements UsefulConstants {
 		// go through each word in dictionary
 		for (int i = 0; i < totalWords; i++) {
 			Word currWord = dictionary[i];
-			if ((currWord.numLetters >= anagMinLength)
-					&& (currWord.numLetters + anagMinLength <= word.numLetters
-					||  currWord.numLetters == word.numLetters)
-					&& (hasFewerofEachLetter(word.letterCount, currWord.letterCount)))
-				candidateArr[numCandidates++]= currWord;
+			if (isACandidate(word, currWord)) {
+				candidateArr[numCandidates++] = currWord;
+			}
 		}
 
+	}
+
+	/**
+	 * Checks if the word from the dictionary is a candidate of the given word
+	 * @param word given word
+	 * @param currWord word from dictionary
+	 * @return
+	 */
+	private static boolean isACandidate(Word word, Word currWord) {
+		return (currWord.numLetters >= anagMinLength)
+				&& (currWord.numLetters + anagMinLength <= word.numLetters
+				||  currWord.numLetters == word.numLetters)
+				&& (hasFewerofEachLetter(word.letterCount, currWord.letterCount));
 	}
 	
 	/**
@@ -105,7 +115,7 @@ public class Anagram extends WordList implements UsefulConstants {
 	private static boolean hasFewerofEachLetter(int anagCount[], int entryCount[]) {
 		// the total number of each letter in the word from the dictionary
 		// must be less than the given word 
-		for (int i = 25; i >= 0; i--)
+		for (int i = NUM_ALPHABETS - 1; i >= 0; i--)
 			if (entryCount[i] > anagCount[i]) return false;
 		return true;
 	}
@@ -182,7 +192,7 @@ public class Anagram extends WordList implements UsefulConstants {
 	private static boolean hasSameLetterCounts(Word word, Word candidate,
 			Word wordToPass) {
 		// number of letters in wordToPass will result in 0 if they have the same letter counts
-		for (int j = 25; j >= 0; j--) {
+		for (int j = NUM_ALPHABETS - 1; j >= 0; j--) {
 			wordToPass.letterCount[j] = (byte) (word.letterCount[j] - candidate.letterCount[j]);
 			if (wordToPass.letterCount[j] != 0) {
 				wordToPass.numLetters += wordToPass.letterCount[j];
@@ -200,7 +210,7 @@ public class Anagram extends WordList implements UsefulConstants {
 	 */
 	private static boolean candidateHasEnoughCommonLetters(Word word, Word candidate) {
 		boolean enoughCommonLetters = true;
-		for (int j = 25; j >= 0 && enoughCommonLetters; j--) {
+		for (int j = NUM_ALPHABETS - 1; j >= 0 && enoughCommonLetters; j--) {
 			if (word.letterCount[j] < candidate.letterCount[j]) {
 				enoughCommonLetters = false;
 			}
@@ -215,7 +225,7 @@ public class Anagram extends WordList implements UsefulConstants {
 	 */
 	private static int sortCandidates(Word word) {
 		// contains the total number of each alphabet in all candidates
-		int[] masterCount = new int[26];		
+		int[] masterCount = new int[NUM_ALPHABETS];		
 		countTotalLetters(masterCount);
 
 		// keeps track of the smallest number of times an alphabet appeared
