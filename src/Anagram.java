@@ -34,30 +34,32 @@ public class Anagram extends WordList implements UsefulConstants {
 
 		// word filename is optional 3rd argument
 		readDict(argv.length == 3 ? argv[2] : "words.txt");
-		doAnagrams(argv[0]);		
+		
+		Word anagram = new Word(argv[0]);
+		
+		// find and print candidates
+		getCandidates(anagram);
+		printCandidate();
+		
+		// find and print anagrams
+		getAnagrams(anagram);		
 		writer.close();
 	}
 
-	private static void doAnagrams(String anag) throws IOException {
-		Word myAnagram = new Word(anag);
-
-		// printing candidates
-		getCandidates(myAnagram);
-		printCandidate();
-
-		// variable is the index of the candidate in Candidate 
+	private static void getAnagrams(Word anagram) throws IOException {
+		// index of the candidate in Candidate array
 		// that contains the least appeared alphabet
-		int rootIndexEnd = sortCandidates(myAnagram);
+		int rootIndexEnd = sortCandidates(anagram);
 
 		// printing anagrams
-		o.println("Anagrams of " + anag + ":");
-		writer.append("Anagrams of " + anag + ":");
+		o.println("Anagrams of " + anagram + ":");
+		writer.append("Anagrams of " + anagram + ":");
 		writer.newLine();
-		findAnagram(myAnagram, new String[50],  0, 0, rootIndexEnd);
+		findAnagram(anagram, new String[50],  0, 0, rootIndexEnd);
 
 		// end
-		o.println("----" + anag + "----");
-		writer.append("----" + anag + "----");
+		o.println("----" + anagram + "----");
+		writer.append("----" + anagram + "----");
 		writer.newLine();
 	}
 
