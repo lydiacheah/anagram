@@ -11,8 +11,8 @@ import java.io.*;
  */
 public interface UsefulConstants {
 	public static final int NUM_ALPHABETS = 26; 
-	public static final int MAXWORDS = 100000;
-	public static final int MAXWORDLEN = 30;
+	public static final int MAX_WORDS = 100000;
+	public static final int MAX_WORD_LENGTH = 30;
 	public static final int EOF = -1;
 	
 	// shorter alias for I/O streams

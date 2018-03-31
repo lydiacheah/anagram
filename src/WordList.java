@@ -1,7 +1,7 @@
 import java.io.*;
 
 public class WordList implements UsefulConstants {
-	private Word[] dictionary = new Word[MAXWORDS];
+	private Word[] dictionary = new Word[MAX_WORDS];
 	private int totalWords = 0;
 
 	public void readDict(String f) {
@@ -27,7 +27,7 @@ public class WordList implements UsefulConstants {
 	 */
 	private void addToDict(FileInputStream fis) {
 		// each word must be less than 30 characters
-		char buffer[] = new char[MAXWORDLEN];
+		char buffer[] = new char[MAX_WORD_LENGTH];
 		String s;
 		int r = 0;
 		while (r != EOF) {

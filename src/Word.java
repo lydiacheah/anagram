@@ -30,17 +30,15 @@ public class Word implements UsefulConstants {
 		return letterCount[j] != 0;
 	}
 
-	public int MultiFieldCompare(Word t, int LeastCommonIndex)
+	public int multiFieldCompare(Word t, int leastCommonIndex)
 	{
-		if ( (containsLetter(LeastCommonIndex) ) &&  !(t.containsLetter(LeastCommonIndex)) )
+		if ((containsLetter(leastCommonIndex)) && !(t.containsLetter(leastCommonIndex))) {
 			return 1;
-		
-		if ( !(containsLetter(LeastCommonIndex) ) &&  (t.containsLetter(LeastCommonIndex)) )
+		} else if (!(containsLetter(leastCommonIndex)) && (t.containsLetter(leastCommonIndex))) {
 			return -1;
-		
-		if ( t.numLetters != numLetters )
+		} else if (t.numLetters != numLetters) {
 			return (t.numLetters - numLetters);
-		
+		}
 		return (stringRep).compareTo(t.stringRep);
 	}
 }

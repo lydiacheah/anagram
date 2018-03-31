@@ -5,7 +5,7 @@
  */
 
 public class OriginalAnagram extends WordList implements UsefulConstants {
-	static Word[] Candidate = new Word[MAXWORDS];
+	static Word[] Candidate = new Word[MAX_WORDS];
 	static int totCandidates=0,
 			   MinimumLength = 3;
 	
@@ -106,7 +106,7 @@ public class OriginalAnagram extends WordList implements UsefulConstants {
 			for (j = 25; j >=0; j--)
 				MasterCount[j] += Candidate[i].count[j];
 
-		LeastCommonCount = MAXWORDS * 5;
+		LeastCommonCount = MAX_WORDS * 5;
 		for (j = 25; j >= 0; j--)
 			if (    MasterCount[j] != 0
 			&& MasterCount[j] < LeastCommonCount
@@ -131,7 +131,7 @@ public class OriginalAnagram extends WordList implements UsefulConstants {
 		swap(left, (left + right)/2);
 		last = left;
 		for (i = left + 1; i <= right; i++)  /* partition */
-			if (Candidate[i].MultiFieldCompare (Candidate[left], LeastCommonIndex) == -1)
+			if (Candidate[i].multiFieldCompare (Candidate[left], LeastCommonIndex) == -1)
 				swap(++last, i);
 
 		swap(last, left);

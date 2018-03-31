@@ -11,15 +11,13 @@ import java.io.IOException;
 public class Anagram extends Word implements UsefulConstants {
 	// for testing
 	private static BufferedWriter writer;
-	// Word array for all anagram candidates
-	private static Word[] candidateArr = new Word[MAXWORDS];
-	// total number of anagram candidates 
-	private static int numCandidates = 0; 
 	// default minimum length of anagram is 3 letters
 	private static int anagMinLength = 3; 
-	// WordList for a given word and file
-	private static WordList wordList = new WordList();
-	
+	// Word array for all anagram candidates
+	private Word[] candidateArr;
+	// total number of anagram candidates 
+	private int numCandidates = 0; 
+		
 	/**
 	 * Main method takes in up to 3 arguments. 
 	 * The first argument is the word on which the anagrams are based. 
@@ -42,20 +40,21 @@ public class Anagram extends Word implements UsefulConstants {
 			anagMinLength = Integer.parseInt(argv[1]);
 		}
 		
-		// word filename is optional 3rd argument
+		// WordList for the given filename
+		WordList wordList = new WordList();
 		wordList.readDict(argv.length == 3 ? argv[2] : "words.txt");
 		
-		Word word = new Word(argv[0]);
+		Anagram anagram = new Anagram(argv[0]);
 		
 		// find and print candidates
-		getCandidates(word);
-		printCandidate();
+		anagram.getCandidates(anagram, wordList);
+		anagram.printCandidate();
 		
 		// find and print anagrams
 		o.println("Anagrams of " + argv[0] + ":");
 		writer.append("Anagrams of " + argv[0] + ":");
 		writer.newLine();
-		getAnagrams(word);
+		anagram.getAnagrams(anagram);
 
 		// end
 		o.println("----" + argv[0] + "----");
@@ -78,7 +77,7 @@ public class Anagram extends Word implements UsefulConstants {
 	 * @param word given word
 	 * @throws IOException
 	 */
-	private static void getAnagrams(Word word) throws IOException {
+	private void getAnagrams(Word word) throws IOException {
 		// index of the candidate in Candidate array
 		// that contains the least appeared alphabet
 		int rootIndexEnd = sortCandidates(word);
@@ -88,11 +87,13 @@ public class Anagram extends Word implements UsefulConstants {
 	/**
 	 * Finds all possible anagram candidates and initializes the candidate array.
 	 * @param word given word
+	 * @param wordList WordList that contains all the words to read
 	 */
-	private static void getCandidates(Word word) {
+	private void getCandidates(Word word, WordList wordList) {
 		int totalWords = wordList.getTotalWords();
 		Word[] dictionary = wordList.getDict(); 
-
+		candidateArr = new Word[MAX_WORDS];
+		
 		// go through each word in dictionary
 		for (int i = 0; i < totalWords; i++) {
 			Word currWord = dictionary[i];
@@ -134,7 +135,7 @@ public class Anagram extends Word implements UsefulConstants {
 	 * Prints all the candidates in the candidate array.
 	 * @throws IOException
 	 */
-	private static void printCandidate() throws IOException {
+	private void printCandidate() throws IOException {
 		o.println("Candidate words:");
 		writer.append("Candidate words:");
 		writer.newLine();
@@ -168,7 +169,7 @@ public class Anagram extends Word implements UsefulConstants {
 	 * @param endAt
 	 * @throws IOException
 	 */
-	private static void findAnagram(Word word, String[] wordArr, int level, int startAt, int endAt) throws IOException {
+	private void findAnagram(Word word, String[] wordArr, int level, int startAt, int endAt) throws IOException {
 		for (int i = startAt; i < endAt; i++) {
 			Word candidate = candidateArr[i];
 			if (candidateHasEnoughCommonLetters(word, candidate)) {
@@ -233,7 +234,7 @@ public class Anagram extends Word implements UsefulConstants {
 	 * @param word
 	 * @return
 	 */
-	private static int sortCandidates(Word word) {
+	private int sortCandidates(Word word) {
 		// contains the total number of each alphabet in all candidates
 		int[] masterCount = new int[NUM_ALPHABETS];		
 		countTotalLetters(masterCount);
@@ -241,7 +242,7 @@ public class Anagram extends Word implements UsefulConstants {
 		// keeps track of the smallest number of times an alphabet appeared
 		// as well as its index
 		int indexOfLeastCommonLetter = 0;
-		int leastCommonCount = MAXWORDS * 5;
+		int leastCommonCount = MAX_WORDS * 5;
 		for (int j = 0; j < masterCount.length; j++) {
 			if (masterCount[j] != 0 
 					&& masterCount[j] < leastCommonCount
@@ -263,7 +264,7 @@ public class Anagram extends Word implements UsefulConstants {
 	 * @param indexOfLeastCommonLetter
 	 * @return
 	 */
-	private static int findCandidateIndex(int indexOfLeastCommonLetter) {
+	private int findCandidateIndex(int indexOfLeastCommonLetter) {
 		int candidateIndex = 0;
 		for (int i = 0; i < numCandidates; i++) {
 			Word candidate = candidateArr[i];
@@ -279,7 +280,7 @@ public class Anagram extends Word implements UsefulConstants {
 	 * Counts the total number of each letter in every candidate word.
 	 * @param masterCount
 	 */
-	private static void countTotalLetters(int[] masterCount) {
+	private void countTotalLetters(int[] masterCount) {
 		// counting the alphabets
 		for (int i = 0; i < numCandidates; i++) {
 			Word candidate = candidateArr[i];
@@ -295,13 +296,13 @@ public class Anagram extends Word implements UsefulConstants {
 	 * @param right
 	 * @param leastCommonIndex
 	 */
-	private static void quickSort(int left, int right, int leastCommonIndex) {
+	private void quickSort(int left, int right, int leastCommonIndex) {
 		// standard quicksort from any algorithm book
 		if (left >= right) return;
 		swap(left, (left + right)/2);
 		int last = left;
 		for (int i = left + 1; i <= right; i++) {  /* partition */
-			if (candidateArr[i].MultiFieldCompare(candidateArr[left], leastCommonIndex) == -1) {
+			if (candidateArr[i].multiFieldCompare(candidateArr[left], leastCommonIndex) == -1) {
 				swap(++last, i);
 			}
 		}
@@ -316,7 +317,7 @@ public class Anagram extends Word implements UsefulConstants {
 	 * @param d1 index of word to swap
 	 * @param d2 index of other word to swap
 	 */
-	private static void swap(int d1, int d2) {
+	private void swap(int d1, int d2) {
 		Word tmp = candidateArr[d1];
 		candidateArr[d1] = candidateArr[d2];
 		candidateArr[d2] = tmp;
