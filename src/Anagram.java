@@ -18,6 +18,14 @@ public class Anagram extends WordList implements UsefulConstants {
 	// default minimum length of anagram is 3 letters
 	private static int anagMinLength = 3; 
 	
+	/**
+	 * Main method takes in up to 3 arguments. 
+	 * The first argument is the word on which the anagrams are based. 
+	 * The second optional argument is the minimum length of the anagram. 
+	 * The third optional argument is the file containing words from which to read. 
+	 * @param argv
+	 * @throws IOException
+	 */
 	public static void main(String[] argv) throws IOException {
 		// writer for testing
 		writer = new BufferedWriter(new FileWriter("refactored.txt"));
@@ -42,11 +50,14 @@ public class Anagram extends WordList implements UsefulConstants {
 		printCandidate();
 		
 		// find and print anagrams
+		o.println("Anagrams of " + argv[0] + ":");
+		writer.append("Anagrams of " + argv[0] + ":");
+		writer.newLine();
 		getAnagrams(word);
 
 		// end
-		o.println("----" + word + "----");
-		writer.append("----" + word + "----");
+		o.println("----" + argv[0] + "----");
+		writer.append("----" + argv[0] + "----");
 		writer.newLine();
 		
 		writer.close();
@@ -62,10 +73,6 @@ public class Anagram extends WordList implements UsefulConstants {
 		// that contains the least appeared alphabet
 		int rootIndexEnd = sortCandidates(word);
 
-		// printing anagrams
-		o.println("Anagrams of " + word + ":");
-		writer.append("Anagrams of " + word + ":");
-		writer.newLine();
 		findAnagram(word, new String[50],  0, 0, rootIndexEnd);
 	}
 	
