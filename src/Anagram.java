@@ -239,7 +239,8 @@ public class Anagram extends WordList implements UsefulConstants {
 	private static int findCandidateIndex(int indexOfLeastCommonLetter) {
 		int candidateIndex = 0;
 		for (int i = 0; i < numCandidates; i++) {
-			if (candidateArr[i].containsLetter(indexOfLeastCommonLetter)) { 
+			Word candidate = candidateArr[i];
+			if (candidate.containsLetter(indexOfLeastCommonLetter)) { 
 				candidateIndex = i;
 				break;
 			}
@@ -248,32 +249,46 @@ public class Anagram extends WordList implements UsefulConstants {
 	}
 
 	/**
+	 * Counts the total number of each letter in every candidate word.
 	 * @param masterCount
 	 */
 	private static void countTotalLetters(int[] masterCount) {
 		// counting the alphabets
 		for (int i = 0; i < numCandidates; i++) {
+			Word candidate = candidateArr[i];
 			for (int j = 0; j < masterCount.length; j++) {
-				masterCount[j] += candidateArr[i].letterCount[j];
+				masterCount[j] += candidate.letterCount[j];
 			}
 		}
 	}
-
-	private static void quickSort(int left, int right, int LeastCommonIndex) {
+	
+	/**
+	 * Standard quicksort algorithm.
+	 * @param left
+	 * @param right
+	 * @param leastCommonIndex
+	 */
+	private static void quickSort(int left, int right, int leastCommonIndex) {
 		// standard quicksort from any algorithm book
-		int i, last;
 		if (left >= right) return;
 		swap(left, (left + right)/2);
-		last = left;
-		for (i = left + 1; i <= right; i++)  /* partition */
-			if (candidateArr[i].MultiFieldCompare (candidateArr[left], LeastCommonIndex) == -1)
+		int last = left;
+		for (int i = left + 1; i <= right; i++) {  /* partition */
+			if (candidateArr[i].MultiFieldCompare(candidateArr[left], leastCommonIndex) == -1) {
 				swap(++last, i);
+			}
+		}
 
 		swap(last, left);
-		quickSort(left, last-1, LeastCommonIndex);
-		quickSort(last+1,right, LeastCommonIndex);
+		quickSort(left, last - 1, leastCommonIndex);
+		quickSort(last + 1, right, leastCommonIndex);
 	}
-
+	
+	/**
+	 * Swap the positions of two words in the candidate array
+	 * @param d1 index of word to swap
+	 * @param d2 index of other word to swap
+	 */
 	private static void swap(int d1, int d2) {
 		Word tmp = candidateArr[d1];
 		candidateArr[d1] = candidateArr[d2];
