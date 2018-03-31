@@ -1,19 +1,25 @@
 
-public class Word  {
-	int letterCount[] = new int[26];  // count of each letter in the word
-	int numLetters;  // number of letters in the word
-	String word;  // the word
+public class Word implements UsefulConstants {
+	// count of each letter in the word
+	protected int letterCount[] = new int[NUM_ALPHABETS];
+	// number of letters in the word
+	protected int numLetters = 0; 
+	// the word
+	protected String stringRep; 
 
-	public Word(String s) { // construct an entry from a string
-		int ch;
-		word = s;
-		numLetters = 0;
+	/**
+	 * Construct a Word from a String.
+	 * @param s String representation of the Word.
+	 */
+	public Word(String s) { 
+		stringRep = s;
 		s = s.toLowerCase();
-		for (int i = 'a'; i <= 'z'; i++) letterCount[i-'a'] = 0;
-
-		for (int i = s.length()-1; i >= 0; i--) {
-			ch = s.charAt(i) - 'a';
-			if (ch >= 0 && ch < 26) {
+		for (int i = 'a'; i <= 'z'; i++) {
+			letterCount[i-'a'] = 0;
+		}
+		for (int i = s.length() - 1; i >= 0; i--) {
+			int ch = s.charAt(i) - 'a';
+			if (ch >= 0 && ch < NUM_ALPHABETS) {
 				numLetters++;
 				letterCount[ch]++;
 			}
@@ -35,7 +41,7 @@ public class Word  {
 		if ( t.numLetters != numLetters )
 			return (t.numLetters - numLetters);
 		
-		return (word).compareTo(t.word);
+		return (stringRep).compareTo(t.stringRep);
 	}
 }
 

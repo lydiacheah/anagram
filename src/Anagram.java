@@ -8,7 +8,7 @@ import java.io.IOException;
  * as this header stays intact.
  */
 
-public class Anagram extends WordList implements UsefulConstants {
+public class Anagram extends Word implements UsefulConstants {
 	// for testing
 	private static BufferedWriter writer;
 	// Word array for all anagram candidates
@@ -17,6 +17,8 @@ public class Anagram extends WordList implements UsefulConstants {
 	private static int numCandidates = 0; 
 	// default minimum length of anagram is 3 letters
 	private static int anagMinLength = 3; 
+	// WordList for a given word and file
+	private static WordList wordList = new WordList();
 	
 	/**
 	 * Main method takes in up to 3 arguments. 
@@ -39,9 +41,9 @@ public class Anagram extends WordList implements UsefulConstants {
 		if (argv.length >= 2) {
 			anagMinLength = Integer.parseInt(argv[1]);
 		}
-
+		
 		// word filename is optional 3rd argument
-		readDict(argv.length == 3 ? argv[2] : "words.txt");
+		wordList.readDict(argv.length == 3 ? argv[2] : "words.txt");
 		
 		Word word = new Word(argv[0]);
 		
@@ -64,6 +66,14 @@ public class Anagram extends WordList implements UsefulConstants {
 	}
 	
 	/**
+	 * Constructor extends Word superclass. 
+	 * @param s
+	 */
+	public Anagram(String s) {
+		super(s);
+	}
+	
+	/**
 	 * Finds and prints all the anagrams of the given word
 	 * @param word given word
 	 * @throws IOException
@@ -80,8 +90,8 @@ public class Anagram extends WordList implements UsefulConstants {
 	 * @param word given word
 	 */
 	private static void getCandidates(Word word) {
-		int totalWords = getTotalWords();
-		Word[] dictionary = getDict(); 
+		int totalWords = wordList.getTotalWords();
+		Word[] dictionary = wordList.getDict(); 
 
 		// go through each word in dictionary
 		for (int i = 0; i < totalWords; i++) {
@@ -131,8 +141,8 @@ public class Anagram extends WordList implements UsefulConstants {
 		
 		// print each candidate out
 		for (int i = 0; i < numCandidates; i++) {
-			o.print(candidateArr[i].word + ", ");
-			writer.append(candidateArr[i].word + ", ");
+			o.print(candidateArr[i].stringRep + ", ");
+			writer.append(candidateArr[i].stringRep + ", ");
 			// only print 4 candidates on one line 
 			if (i % 4 == 3) {
 				o.print("\n");
@@ -163,7 +173,7 @@ public class Anagram extends WordList implements UsefulConstants {
 			Word candidate = candidateArr[i];
 			if (candidateHasEnoughCommonLetters(word, candidate)) {
 				Word wordToPass = new Word("");
-				wordArr[level] = candidate.word;
+				wordArr[level] = candidate.stringRep;
 				
 				if (hasSameLetterCounts(word, candidate, wordToPass)) {
 					/* Found a series of words! */
