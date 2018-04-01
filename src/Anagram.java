@@ -45,10 +45,8 @@ public class Anagram extends Word implements UsefulConstants {
 		o.println("----" + stringRepresentation + "----");
 		writer.append("----" + stringRepresentation + "----");
 		writer.newLine(); 
-
 		writer.close();
-	}
-
+	}	
 
 	/**
 	 * Finds and prints all the anagrams of the given word
@@ -133,7 +131,6 @@ public class Anagram extends Word implements UsefulConstants {
 				writer.append(" ");
 			}
 		}
-
 		o.println();
 		writer.newLine();
 		o.println();

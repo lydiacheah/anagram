@@ -3,7 +3,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-/**
+/**• OutOfBounds fix
+• a faster way to assert the tests
+• minor type errors
  * Test program for original anagram and refactored anagram.
  * 
  * Authors: Lydia Cheah and Sofia Lis 
