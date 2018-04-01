@@ -30,7 +30,7 @@ public class AnagramTest {
 		if (testWord(argumentsDonkey, donkeyPath, refactoredPath)
 				&&	testWord(argumentsComputer, computerPath, refactoredPath)
 				&& testWord(argumentsComputerFour, computerFourPath, refactoredPath)) 
-			System.out.println("Everything works!");
+			System.out.println("\nTests pass! Everything works!");
 	}
 
 	/**
@@ -53,9 +53,9 @@ public class AnagramTest {
 		boolean hasWorked = Arrays.equals(original, test);
 
 		if (hasWorked) 
-			System.out.println(args[0] + " works!");
+			System.out.println(originalFile + " works!");
 		else 
-			System.out.println(args[0] + " does not work!");
+			System.out.println(originalFile + " does not work!");
 
 		return hasWorked;
 	}
