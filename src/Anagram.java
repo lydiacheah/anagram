@@ -12,66 +12,44 @@ public class Anagram extends Word implements UsefulConstants {
 	// for testing
 	private static BufferedWriter writer;
 	// default minimum length of anagram is 3 letters
-	private static int anagMinLength = 3; 
+	private int minLength = 3; 
 	// Word array for all anagram candidates
 	private Word[] candidateArr;
 	// total number of anagram candidates 
 	private int numCandidates = 0; 
-		
-	/**
-	 * Main method takes in up to 3 arguments. 
-	 * The first argument is the word on which the anagrams are based. 
-	 * The second optional argument is the minimum length of the anagram. 
-	 * The third optional argument is the file containing words from which to read. 
-	 * @param argv
-	 * @throws IOException
-	 */
-	public static void main(String[] argv) throws IOException {
-		// writer for testing
-		writer = new BufferedWriter(new FileWriter("refactored.txt"));
-		// no arguments given
-		if (argv.length < 1 || argv.length > 3) {
-			e.println("Usage: java anagram  string-to-anagram " + "[min-len [word-file]]");
-			return;
-		}
-		
-		// second argument is the minimum length of anagram 
-		if (argv.length >= 2) {
-			anagMinLength = Integer.parseInt(argv[1]);
-		}
-		
-		// WordList for the given filename
-		WordList wordList = new WordList();
-		wordList.readDict(argv.length == 3 ? argv[2] : "words.txt");
-		
-		Anagram anagram = new Anagram(argv[0]);
-		
-		// find and print candidates
-		anagram.getCandidates(anagram, wordList);
-		anagram.printCandidate();
-		
-		// find and print anagrams
-		o.println("Anagrams of " + argv[0] + ":");
-		writer.append("Anagrams of " + argv[0] + ":");
-		writer.newLine();
-		anagram.getAnagrams(anagram);
 
-		// end
-		o.println("----" + argv[0] + "----");
-		writer.append("----" + argv[0] + "----");
-		writer.newLine();
-		
-		writer.close();
-	}
-	
 	/**
 	 * Constructor extends Word superclass. 
 	 * @param s
 	 */
-	public Anagram(String s) {
+	public Anagram(String s, int length) {
 		super(s);
+		minLength = length;
 	}
-	
+
+	public void findAnagrams(WordList wordList) throws IOException {
+		// writer for testing
+		writer = new BufferedWriter(new FileWriter("refactored.txt"));
+		
+		// find and print candidates
+		getCandidates(this, wordList);
+		printCandidate();
+
+		// find and print anagrams
+		o.println("Anagrams of " + stringRepresentation + ":");
+		writer.append("Anagrams of " + stringRepresentation + ":");
+		writer.newLine(); 
+		getAnagrams(this);
+
+		// end
+		o.println("----" + stringRepresentation + "----");
+		writer.append("----" + stringRepresentation + "----");
+		writer.newLine(); 
+
+		writer.close();
+	}
+
+
 	/**
 	 * Finds and prints all the anagrams of the given word
 	 * @param word given word
@@ -81,9 +59,9 @@ public class Anagram extends Word implements UsefulConstants {
 		// index of the candidate in Candidate array
 		// that contains the least appeared alphabet
 		int rootIndexEnd = sortCandidates(word);
-		findAnagram(word, new String[50],  0, 0, rootIndexEnd);
+		findAnagram(word, new String[50], 0, 0, rootIndexEnd); 
 	}
-	
+
 	/**
 	 * Finds all possible anagram candidates and initializes the candidate array.
 	 * @param word given word
@@ -93,7 +71,7 @@ public class Anagram extends Word implements UsefulConstants {
 		int totalWords = wordList.getTotalWords();
 		Word[] dictionary = wordList.getDict(); 
 		candidateArr = new Word[MAX_WORDS];
-		
+
 		// go through each word in dictionary
 		for (int i = 0; i < totalWords; i++) {
 			Word currWord = dictionary[i];
@@ -110,12 +88,12 @@ public class Anagram extends Word implements UsefulConstants {
 	 * @return
 	 */
 	private boolean isACandidate(Word word, Word currWord) {
-		return (currWord.numLetters >= anagMinLength)
-				&& (currWord.numLetters + anagMinLength <= word.numLetters
+		return (currWord.numLetters >= minLength)
+				&& (currWord.numLetters + minLength <= word.numLetters
 				||  currWord.numLetters == word.numLetters)
 				&& (hasFewerofEachLetter(word.letterCount, currWord.letterCount));
 	}
-	
+
 	/**
 	 * Checks if the dictionary word has fewer of each letter than the given word
 	 * @param anagCount array containing the count of each letter in the given word
@@ -126,10 +104,11 @@ public class Anagram extends Word implements UsefulConstants {
 		// the total number of each letter in the word from the dictionary
 		// must be less than the given word 
 		for (int i = NUM_ALPHABETS - 1; i >= 0; i--)
-			if (entryCount[i] > anagCount[i]) return false;
+			if (entryCount[i] > anagCount[i]) 
+				return false;
 		return true;
 	}
-	
+
 	/**
 	 * Prints all the candidates in the candidate array.
 	 * @throws IOException
@@ -138,11 +117,11 @@ public class Anagram extends Word implements UsefulConstants {
 		o.println("Candidate words:");
 		writer.append("Candidate words:");
 		writer.newLine();
-		
+
 		// print each candidate out
 		for (int i = 0; i < numCandidates; i++) {
-			o.print(candidateArr[i].stringRep + ", ");
-			writer.append(candidateArr[i].stringRep + ", ");
+			o.print(candidateArr[i].stringRepresentation + ", ");
+			writer.append(candidateArr[i].stringRepresentation + ", ");
 			// only print 4 candidates on one line 
 			if (i % 4 == 3) {
 				o.print("\n");
@@ -152,20 +131,20 @@ public class Anagram extends Word implements UsefulConstants {
 				writer.append(" ");
 			}
 		}
-		
+
 		o.println();
 		writer.newLine();
 		o.println();
 		writer.newLine();
 	}
-	
+
 	/**
 	 * Finds all the anagrams of a specific word. 
-	 * @param word
-	 * @param wordArr
-	 * @param level
-	 * @param startAt
-	 * @param endAt
+	 * @param word the given word
+	 * @param wordArr the array of words
+	 * @param level 
+	 * @param startAt start index 
+	 * @param endAt end index
 	 * @throws IOException
 	 */
 	private void findAnagram(Word word, String[] wordArr, int level, int startAt, int endAt) throws IOException {
@@ -173,17 +152,18 @@ public class Anagram extends Word implements UsefulConstants {
 			Word candidate = candidateArr[i];
 			if (candidateHasEnoughCommonLetters(word, candidate)) {
 				Word wordToPass = new Word("");
-				wordArr[level] = candidate.stringRep;
-				
+				wordArr[level] = candidate.stringRepresentation;
+
 				if (hasSameLetterCounts(word, candidate, wordToPass)) {
-					/* Found a series of words! */
+					// An anagram is found
 					for (int j = 0; j <= level; j++) {
 						o.print(wordArr[j] + " ");
 						writer.append(wordArr[j] + " ");
 					}
 					o.println();
 					writer.newLine();
-				} else if (wordToPass.numLetters >= anagMinLength){
+				} 
+				else if (wordToPass.numLetters >= minLength) {
 					findAnagram(wordToPass, wordArr, level + 1, i, numCandidates);
 				}
 			}
@@ -199,8 +179,7 @@ public class Anagram extends Word implements UsefulConstants {
 	 * @param wordToPass 
 	 * @return true if they have the same letter count, false if not
 	 */
-	private boolean hasSameLetterCounts(Word word, Word candidate,
-			Word wordToPass) {
+	private boolean hasSameLetterCounts(Word word, Word candidate, Word wordToPass) {
 		// number of letters in wordToPass will result in 0 if they have the same letter counts
 		for (int j = NUM_ALPHABETS - 1; j >= 0; j--) {
 			wordToPass.letterCount[j] = (byte) (word.letterCount[j] - candidate.letterCount[j]);
@@ -242,6 +221,7 @@ public class Anagram extends Word implements UsefulConstants {
 		// as well as its index
 		int indexOfLeastCommonLetter = 0;
 		int leastCommonCount = MAX_WORDS * 5;
+
 		for (int j = 0; j < masterCount.length; j++) {
 			if (masterCount[j] != 0 
 					&& masterCount[j] < leastCommonCount
@@ -288,7 +268,7 @@ public class Anagram extends Word implements UsefulConstants {
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard quicksort algorithm.
 	 * @param left
@@ -310,7 +290,7 @@ public class Anagram extends Word implements UsefulConstants {
 		quickSort(left, last - 1, leastCommonIndex);
 		quickSort(last + 1, right, leastCommonIndex);
 	}
-	
+
 	/**
 	 * Swap the positions of two words in the candidate array
 	 * @param d1 index of word to swap

@@ -1,10 +1,22 @@
 import java.io.*;
 
+/**
+ * 
+ * 
+ * @author Lydia Cheah and Sofia Lis
+ *
+ */
 public class WordList implements UsefulConstants {
+	// The dictionary for the current anagram
 	private Word[] dictionary = new Word[MAX_WORDS];
+	// Total number of words in the list
 	private int totalWords = 0;
 
-	public void readDict(String f) {
+	/**
+	 * Initializes the dictionary from a file name
+	 * @param f the name of the file containing the dictionary
+	 */
+	public void readDict(String f) { 
 		FileInputStream fis;
 		// read file
 		try {
@@ -28,32 +40,40 @@ public class WordList implements UsefulConstants {
 	private void addToDict(FileInputStream fis) {
 		// each word must be less than 30 characters
 		char buffer[] = new char[MAX_WORD_LENGTH];
-		String s;
-		int r = 0;
-		while (r != EOF) {
-			int i = 0;
+		String word;
+		int character = 0;
+		while (character != EOF) {
+			int letterCount = 0;
 			try {
 				// read one word in from the word file
-				while ((r = fis.read()) != EOF ) {
-					if (r == '\n') break;
-					buffer[i++] = (char) r;
+				while ((character = fis.read()) != EOF) {
+					if (character == '\n') break;
+					buffer[letterCount++] = (char) character;
 				}
 			} catch (IOException ioe) {
 				e.println("Cannot read the file of words ");
 				throw new RuntimeException();
 			}
 			// add the word to Dictionary array
-			s = new String(buffer,0,i);
-			dictionary[totalWords] = new Word(s);
+			word = new String(buffer, 0, letterCount);
+			dictionary[totalWords] = new Word(word);
 			totalWords++; // increase the total count of words
 		}
 	}
 	
-	public Word[] getDict() {
+	/**
+	 * Returns the dictionary
+	 * @return word[]
+	 */
+	public Word[] getDict() { 
 		return dictionary;
 	}
 	
-	public int getTotalWords() {
+	/**
+	 * Returns the total number of words in the dictionary
+	 * @return totalWords
+	 */
+	public int getTotalWords() { 
 		return totalWords;
 	}
 }

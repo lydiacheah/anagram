@@ -1,0 +1,30 @@
+Candidate words:
+cero,  come,  comp,  computer, 
+cope,  core,  corm,  cote, 
+coup,  crop,  cure,  curt, 
+cute,  ecru,  euro,  meou, 
+mope,  more,  mort,  mote, 
+moue,  mure,  mute,  omer, 
+perm,  pert,  poem,  poet, 
+pome,  pore,  port,  pour, 
+pout,  prom,  puce,  pure, 
+repo,  romp,  rope,  rote, 
+roue,  roup,  rout,  rump, 
+temp,  term,  tome,  tope, 
+torc,  tore,  tour,  trop, 
+true,  tump,  
+
+Anagrams of computer:
+poem curt 
+pome curt 
+prom cute 
+mope curt 
+romp cute 
+mort puce 
+rump cote 
+mute crop 
+term coup 
+tump cero 
+tump core 
+true comp 
+----computer----
