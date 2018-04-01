@@ -79,6 +79,8 @@ public class Anagram extends Word implements UsefulConstants {
 				candidateArr[numCandidates++] = currWord;
 			}
 		}
+		
+		assert wellFormed();
 	}
 
 	/**
@@ -168,6 +170,7 @@ public class Anagram extends Word implements UsefulConstants {
 				}
 			}
 		}
+		assert wellFormed();
 	}
 
 	/**
@@ -289,6 +292,8 @@ public class Anagram extends Word implements UsefulConstants {
 		swap(last, left);
 		quickSort(left, last - 1, leastCommonIndex);
 		quickSort(last + 1, right, leastCommonIndex);
+		
+		assert wellFormed();
 	}
 
 	/**
@@ -300,5 +305,31 @@ public class Anagram extends Word implements UsefulConstants {
 		Word tmp = candidateArr[d1];
 		candidateArr[d1] = candidateArr[d2];
 		candidateArr[d2] = tmp;
+		
+		assert wellFormed();
+	}
+	
+	/**
+	 * Return true if the letterCount array and candidateArr 
+	 * satisfy the class invariants.
+	 */
+	@Override
+	public boolean wellFormed() {
+		super.wellFormed();
+		if (candidateArr == null) {
+			return false; 
+		}
+		if (candidateArr.length == 0) {
+			return false;
+		}
+		if (candidateArr.length > MAX_WORDS) {
+			return false;
+		}
+		for (int i = 0; i < numCandidates; i++) {
+			if (candidateArr[i] == null) {
+				return false;
+			}
+		}
+		return true; 
 	}
 }
